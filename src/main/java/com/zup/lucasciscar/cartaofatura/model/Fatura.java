@@ -42,4 +42,9 @@ public class Fatura {
     public BigDecimal getTotal() {
         return total;
     }
+
+    public void fecharFatura() {
+        fechada = true;
+        fechadaEm = LocalDateTime.now();
+    }
 }

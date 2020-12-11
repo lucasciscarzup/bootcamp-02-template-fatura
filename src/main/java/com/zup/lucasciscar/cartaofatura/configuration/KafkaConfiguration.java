@@ -1,6 +1,6 @@
 package com.zup.lucasciscar.cartaofatura.configuration;
 
-import com.zup.lucasciscar.cartaofatura.dto.TransacaoEventResponse;
+import com.zup.lucasciscar.cartaofatura.dto.response.TransacaoEventResponse;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;

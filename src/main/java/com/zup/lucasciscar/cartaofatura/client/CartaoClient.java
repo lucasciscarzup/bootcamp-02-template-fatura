@@ -1,6 +1,6 @@
 package com.zup.lucasciscar.cartaofatura.client;
 
-import com.zup.lucasciscar.cartaofatura.dto.CartaoClientResponse;
+import com.zup.lucasciscar.cartaofatura.dto.response.CartaoClientResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

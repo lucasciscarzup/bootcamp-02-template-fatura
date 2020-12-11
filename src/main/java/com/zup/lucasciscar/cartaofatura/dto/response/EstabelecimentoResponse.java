@@ -1,4 +1,4 @@
-package com.zup.lucasciscar.cartaofatura.dto;
+package com.zup.lucasciscar.cartaofatura.dto.response;
 
 import com.zup.lucasciscar.cartaofatura.model.Estabelecimento;
 

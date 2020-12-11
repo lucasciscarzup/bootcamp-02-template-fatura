@@ -1,8 +1,8 @@
 package com.zup.lucasciscar.cartaofatura.util;
 
 import com.zup.lucasciscar.cartaofatura.client.CartaoClient;
-import com.zup.lucasciscar.cartaofatura.dto.CartaoClientResponse;
-import com.zup.lucasciscar.cartaofatura.dto.TransacaoEventResponse;
+import com.zup.lucasciscar.cartaofatura.dto.response.CartaoClientResponse;
+import com.zup.lucasciscar.cartaofatura.dto.response.TransacaoEventResponse;
 import com.zup.lucasciscar.cartaofatura.model.Cartao;
 import com.zup.lucasciscar.cartaofatura.model.Fatura;
 import com.zup.lucasciscar.cartaofatura.model.Transacao;
