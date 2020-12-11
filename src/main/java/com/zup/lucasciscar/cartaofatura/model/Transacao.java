@@ -2,7 +2,6 @@ package com.zup.lucasciscar.cartaofatura.model;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Positive;
@@ -17,8 +16,6 @@ public class Transacao {
     @Id
     @GeneratedValue
     private UUID id;
-    @NotBlank
-    private String idLegado;
     @NotNull
     @Positive
     private BigDecimal valor;
@@ -26,24 +23,24 @@ public class Transacao {
     @Embedded
     private Estabelecimento estabelecimento;
     @NotNull
-    @Valid
-    @ManyToOne
-    private Cartao cartao;
-    @NotNull
     @Past
     private LocalDateTime efetivadaEm;
+    @Valid
+    @ManyToOne
+    private Fatura fatura;
 
     @Deprecated
     public Transacao() {}
 
-    public Transacao(@NotBlank String idLegado, @NotNull @Positive BigDecimal valor,
-                     @NotNull Estabelecimento estabelecimento, @NotNull @Valid Cartao cartao,
+    public Transacao(@NotNull @Positive BigDecimal valor, @NotNull Estabelecimento estabelecimento,
                      @NotNull @Past LocalDateTime efetivadaEm) {
-        this.idLegado = idLegado;
         this.valor = valor;
         this.estabelecimento = estabelecimento;
-        this.cartao = cartao;
         this.efetivadaEm = efetivadaEm;
+    }
+
+    public void setFatura(Fatura fatura) {
+        this.fatura = fatura;
     }
 
     public BigDecimal getValor() {
@@ -52,10 +49,6 @@ public class Transacao {
 
     public Estabelecimento getEstabelecimento() {
         return estabelecimento;
-    }
-
-    public Cartao getCartao() {
-        return cartao;
     }
 
     public LocalDateTime getEfetivadaEm() {

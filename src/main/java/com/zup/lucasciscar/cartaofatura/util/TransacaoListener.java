@@ -4,8 +4,10 @@ import com.zup.lucasciscar.cartaofatura.client.CartaoClient;
 import com.zup.lucasciscar.cartaofatura.dto.CartaoClientResponse;
 import com.zup.lucasciscar.cartaofatura.dto.TransacaoEventResponse;
 import com.zup.lucasciscar.cartaofatura.model.Cartao;
+import com.zup.lucasciscar.cartaofatura.model.Fatura;
 import com.zup.lucasciscar.cartaofatura.model.Transacao;
 import com.zup.lucasciscar.cartaofatura.repository.CartaoRepository;
+import com.zup.lucasciscar.cartaofatura.repository.FaturaRepository;
 import com.zup.lucasciscar.cartaofatura.repository.TransacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -18,11 +20,13 @@ import java.util.Optional;
 public class TransacaoListener {
 
     @Autowired
+    private CartaoClient cartaoClient;
+    @Autowired
     private TransacaoRepository transacaoRepository;
     @Autowired
     private CartaoRepository cartaoRepository;
     @Autowired
-    private CartaoClient cartaoClient;
+    private FaturaRepository faturaRepository;
 
     @KafkaListener(topics = "${spring.kafka.topic.transactions}")
     @Transactional
@@ -39,7 +43,19 @@ public class TransacaoListener {
             cartaoRepository.save(cartao);
         }
 
-        Transacao transacao = transacaoEventResponse.toModel(cartao);
+        Transacao transacao = transacaoEventResponse.toModel();
+
+        Optional<Fatura> faturaOpt = faturaRepository.findTopByFechadaFalse();
+        Fatura fatura;
+        if(faturaOpt.isPresent()) {
+            fatura = faturaOpt.get();
+            fatura.adicionarTotal(transacao.getValor());
+        } else {
+            fatura = new Fatura(transacao.getValor(), false, cartao);
+        }
+        faturaRepository.save(fatura);
+
+        transacao.setFatura(fatura);
         transacaoRepository.save(transacao);
     }
 }

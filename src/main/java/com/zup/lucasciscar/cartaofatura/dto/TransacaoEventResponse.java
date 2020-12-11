@@ -1,6 +1,5 @@
 package com.zup.lucasciscar.cartaofatura.dto;
 
-import com.zup.lucasciscar.cartaofatura.model.Cartao;
 import com.zup.lucasciscar.cartaofatura.model.Estabelecimento;
 import com.zup.lucasciscar.cartaofatura.model.Transacao;
 
@@ -9,17 +8,12 @@ import java.time.LocalDateTime;
 
 public class TransacaoEventResponse {
 
-    private String id;
     private BigDecimal valor;
     private EstabelecimentoEventResponse estabelecimento;
     private CartaoEventResponse cartao;
     private LocalDateTime efetivadaEm;
 
     public TransacaoEventResponse() {}
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public void setValor(BigDecimal valor) {
         this.valor = valor;
@@ -41,9 +35,9 @@ public class TransacaoEventResponse {
         return cartao;
     }
 
-    public Transacao toModel(Cartao cartao) {
+    public Transacao toModel() {
         Estabelecimento estabelecimento = this.estabelecimento.toModel();
 
-        return new Transacao(id, valor, estabelecimento, cartao, efetivadaEm);
+        return new Transacao(valor, estabelecimento, efetivadaEm);
     }
 }
