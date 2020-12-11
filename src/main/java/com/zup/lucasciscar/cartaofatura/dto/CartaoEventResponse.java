@@ -1,27 +1,19 @@
 package com.zup.lucasciscar.cartaofatura.dto;
 
-import com.zup.lucasciscar.cartaofatura.model.Cartao;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CartaoEventResponse {
 
-    private String id;
-    private String email;
+    @JsonProperty("id")
+    private String numero;
 
     public CartaoEventResponse() {}
 
-    public void setId(String id) {
-        this.id = id;
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Cartao toModel() {
-        return new Cartao(id, email);
-    }
-
-    public String getId() {
-        return id;
+    public String getNumero() {
+        return numero;
     }
 }

@@ -1,6 +1,7 @@
 package com.zup.lucasciscar.cartaofatura.controller;
 
 import com.zup.lucasciscar.cartaofatura.dto.FaturaResponse;
+import com.zup.lucasciscar.cartaofatura.dto.SaldoResponse;
 import com.zup.lucasciscar.cartaofatura.model.Cartao;
 import com.zup.lucasciscar.cartaofatura.model.Transacao;
 import com.zup.lucasciscar.cartaofatura.repository.CartaoRepository;
@@ -26,7 +27,7 @@ public class FaturaController {
     private TransacaoRepository transacaoRepository;
 
     @GetMapping("/cartoes/{idCartao}/fatura")
-    public ResponseEntity<?> mostrarFatura(@PathVariable("idCartao")UUID idCartao) {
+    public ResponseEntity<?> mostrarFatura(@PathVariable("idCartao") UUID idCartao) {
         Optional<Cartao> cartaoOpt = cartaoRepository.findById(idCartao);
         Cartao cartao = cartaoOpt.orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Cartão não encontrado"));
@@ -35,5 +36,18 @@ public class FaturaController {
         FaturaResponse faturaResponse = new FaturaResponse(transacoes);
 
         return ResponseEntity.ok(faturaResponse);
+    }
+
+    @GetMapping("/cartoes/{idCartao}/saldo")
+    public ResponseEntity<?> mostrarSaldo(@PathVariable("idCartao") UUID idCartao) {
+        Optional<Cartao> cartaoOpt = cartaoRepository.findById(idCartao);
+        Cartao cartao = cartaoOpt.orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Cartão não encontrado"));
+
+        List<Transacao> transacoes = transacaoRepository.findByCartaoOrderByEfetivadaEmDesc(cartao);
+        FaturaResponse faturaResponse = new FaturaResponse(transacoes);
+
+        SaldoResponse saldoResponse = new SaldoResponse(cartao.getLimite().subtract(faturaResponse.getTotal()));
+        return ResponseEntity.ok(saldoResponse);
     }
 }

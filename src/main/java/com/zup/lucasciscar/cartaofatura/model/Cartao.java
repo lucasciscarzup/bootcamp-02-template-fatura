@@ -4,8 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -17,23 +19,23 @@ public class Cartao {
     private UUID id;
     @NotBlank
     private String numero;
-    @NotBlank
-    @Email
-    private String email;
+    @NotNull
+    @Positive
+    private BigDecimal limite;
 
     @Deprecated
     public Cartao() {};
 
-    public Cartao(@NotBlank String numero, @NotBlank @Email String email) {
+    public Cartao(@NotBlank String numero, @NotNull @Positive BigDecimal limite) {
         this.numero = numero;
-        this.email = email;
+        this.limite = limite;
     }
 
     public String getNumero() {
         return numero;
     }
 
-    public String getEmail() {
-        return email;
+    public BigDecimal getLimite() {
+        return limite;
     }
 }

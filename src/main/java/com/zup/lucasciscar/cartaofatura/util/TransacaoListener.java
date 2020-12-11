@@ -1,5 +1,7 @@
 package com.zup.lucasciscar.cartaofatura.util;
 
+import com.zup.lucasciscar.cartaofatura.client.CartaoClient;
+import com.zup.lucasciscar.cartaofatura.dto.CartaoClientResponse;
 import com.zup.lucasciscar.cartaofatura.dto.TransacaoEventResponse;
 import com.zup.lucasciscar.cartaofatura.model.Cartao;
 import com.zup.lucasciscar.cartaofatura.model.Transacao;
@@ -19,17 +21,21 @@ public class TransacaoListener {
     private TransacaoRepository transacaoRepository;
     @Autowired
     private CartaoRepository cartaoRepository;
+    @Autowired
+    private CartaoClient cartaoClient;
 
     @KafkaListener(topics = "${spring.kafka.topic.transactions}")
     @Transactional
     public void listen(TransacaoEventResponse transacaoEventResponse) {
-        Optional<Cartao> cartaoOpt = cartaoRepository.findByNumero(transacaoEventResponse.getCartao().getId());
+        String numCartao = transacaoEventResponse.getCartao().getNumero();
+        Optional<Cartao> cartaoOpt = cartaoRepository.findByNumero(numCartao);
 
         Cartao cartao;
         if(cartaoOpt.isPresent())
             cartao = cartaoOpt.get();
         else {
-            cartao = transacaoEventResponse.getCartao().toModel();
+            CartaoClientResponse cartaoClientResponse = cartaoClient.buscarLimiteCartao(numCartao);
+            cartao = new Cartao(numCartao, cartaoClientResponse.getLimite());
             cartaoRepository.save(cartao);
         }
 
