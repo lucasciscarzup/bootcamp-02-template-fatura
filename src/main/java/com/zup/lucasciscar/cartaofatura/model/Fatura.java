@@ -39,6 +39,10 @@ public class Fatura {
         total = total.add(valor);
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public BigDecimal getTotal() {
         return total;
     }

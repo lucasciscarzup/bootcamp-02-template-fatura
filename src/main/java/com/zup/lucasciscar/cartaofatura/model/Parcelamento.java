@@ -24,6 +24,12 @@ public class Parcelamento {
     @Valid
     @OneToOne
     private Fatura fatura;
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    public enum Status {
+        APROVADO, NEGADO;
+    }
 
     @Deprecated
     public Parcelamento() {}
@@ -35,7 +41,23 @@ public class Parcelamento {
         this.fatura = fatura;
     }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public UUID getId() {
         return id;
+    }
+
+    public int getParcelas() {
+        return parcelas;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public Fatura getFatura() {
+        return fatura;
     }
 }
