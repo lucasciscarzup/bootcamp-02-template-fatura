@@ -3,9 +3,6 @@ package com.zup.lucasciscar.cartaofatura.model;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -16,39 +13,34 @@ public class Fatura {
     @GeneratedValue
     private UUID id;
     @NotNull
-    private BigDecimal total;
-    @NotNull
-    private boolean fechada;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     @NotNull
     @Valid
     @ManyToOne
     private Cartao cartao;
-    @PastOrPresent
-    private LocalDateTime fechadaEm;
+
+    public enum Status {
+        ABERTA, FECHADA;
+    }
 
     @Deprecated
     public Fatura() {}
 
-    public Fatura(@NotNull BigDecimal total, @NotNull boolean fechada, @NotNull @Valid Cartao cartao) {
-        this.total = total;
-        this.fechada = fechada;
+    public Fatura(@NotNull @Valid Cartao cartao) {
+        this.status = Status.ABERTA;
         this.cartao = cartao;
-    }
-
-    public void adicionarTotal(BigDecimal valor) {
-        total = total.add(valor);
     }
 
     public UUID getId() {
         return id;
     }
 
-    public BigDecimal getTotal() {
-        return total;
+    public Status getStatus() {
+        return status;
     }
 
-    public void fecharFatura() {
-        fechada = true;
-        fechadaEm = LocalDateTime.now();
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

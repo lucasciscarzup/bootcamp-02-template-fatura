@@ -11,7 +11,7 @@ import java.util.UUID;
 @Repository
 public interface FaturaRepository extends JpaRepository<Fatura, UUID> {
 
-    Optional<Fatura> findTopByCartaoAndFechadaFalse(Cartao cartao);
+    Optional<Fatura> findTopByCartaoAndStatus(Cartao cartao, Fatura.Status status);
 
-    Optional<Fatura> findTopByFechadaFalse();
+    Optional<Fatura> findTopByStatus(Fatura.Status status);
 }

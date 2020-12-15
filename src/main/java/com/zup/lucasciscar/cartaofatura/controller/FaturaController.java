@@ -36,12 +36,12 @@ public class FaturaController {
         Cartao cartao = cartaoOpt.orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Cartão não encontrado"));
 
-        Optional<Fatura> faturaOpt = faturaRepository.findTopByCartaoAndFechadaFalse(cartao);
+        Optional<Fatura> faturaOpt = faturaRepository.findTopByCartaoAndStatus(cartao, Fatura.Status.ABERTA);
         Fatura fatura = faturaOpt.orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nenhuma Fatura em aberto"));
 
         List<Transacao> transacoes = transacaoRepository.findByFaturaOrderByEfetivadaEmDesc(fatura);
-        FaturaResponse faturaResponse = new FaturaResponse(fatura, transacoes);
+        FaturaResponse faturaResponse = new FaturaResponse(transacoes);
 
         return ResponseEntity.ok(faturaResponse);
     }
@@ -52,11 +52,12 @@ public class FaturaController {
         Cartao cartao = cartaoOpt.orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Cartão não encontrado"));
 
-        Optional<Fatura> faturaOpt = faturaRepository.findTopByCartaoAndFechadaFalse(cartao);
+        Optional<Fatura> faturaOpt = faturaRepository.findTopByCartaoAndStatus(cartao, Fatura.Status.ABERTA);
         Fatura fatura = faturaOpt.orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nenhuma Fatura em aberto"));
 
-        SaldoResponse saldoResponse = new SaldoResponse(cartao.getLimite().subtract(fatura.getTotal()));
+        List<Transacao> transacoes = transacaoRepository.findByFaturaOrderByEfetivadaEmDesc(fatura);
+        SaldoResponse saldoResponse = new SaldoResponse(cartao, transacoes);
         return ResponseEntity.ok(saldoResponse);
     }
 }

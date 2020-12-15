@@ -45,14 +45,8 @@ public class TransacaoListener {
 
         Transacao transacao = transacaoEventResponse.toModel();
 
-        Optional<Fatura> faturaOpt = faturaRepository.findTopByFechadaFalse();
-        Fatura fatura;
-        if(faturaOpt.isPresent()) {
-            fatura = faturaOpt.get();
-            fatura.adicionarTotal(transacao.getValor());
-        } else {
-            fatura = new Fatura(transacao.getValor(), false, cartao);
-        }
+        Optional<Fatura> faturaOpt = faturaRepository.findTopByStatus(Fatura.Status.ABERTA);
+        Fatura fatura = faturaOpt.isPresent() ? faturaOpt.get() : new Fatura(cartao);
         faturaRepository.save(fatura);
 
         transacao.setFatura(fatura);

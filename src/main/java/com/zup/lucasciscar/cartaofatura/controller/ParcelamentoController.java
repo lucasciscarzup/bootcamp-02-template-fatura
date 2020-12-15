@@ -54,7 +54,7 @@ public class ParcelamentoController {
         Parcelamento parcelamento = parcelamentoRequest.toModel(fatura);
         parcelamentoRepository.save(parcelamento);
 
-        fatura.fecharFatura();
+        fatura.setStatus(Fatura.Status.FECHADA);
         faturaRepository.save(fatura);
 
         ParcelamentoClientRequest parcelamentoClientRequest = new ParcelamentoClientRequest(parcelamento);
@@ -70,7 +70,7 @@ public class ParcelamentoController {
             parcelamentoRepository.save(parcelamento);
         }
 
-        URI location = builder.path("/cartoes/{idCartao}/faturas/{idFatura}/parcelamento").build(idCartao, idFatura,
+        URI location = builder.path("/cartoes/{idCartao}/faturas/{idFatura}/parcelamento/{id}").build(idCartao, idFatura,
                 parcelamento.getId());
         return ResponseEntity.created(location).build();
     }
